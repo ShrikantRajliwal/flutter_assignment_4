@@ -94,7 +94,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               controller: titleController,
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              // softWrap:true,
               style: TextStyle(color: Colors.white, fontSize: 35),
               decoration: InputDecoration(
                 border: OutlineInputBorder(borderSide: BorderSide.none),

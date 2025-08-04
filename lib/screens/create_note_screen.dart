@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_assignment_4/models/note_model.dart';
 import 'package:flutter_assignment_4/providers/data_provider.dart';
 import 'package:provider/provider.dart';
+
+final _formkey = GlobalKey<FormState>();
 
 class CreateNoteScreen extends StatelessWidget {
   const CreateNoteScreen({super.key});
@@ -42,87 +43,109 @@ class CreateNoteScreen extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: Color(0Xff252525),
-                            title: Icon(Icons.info),
-                            content: Text(
-                              'Are you sure you want to save?',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 23,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            actions: <Widget>[
-                              Row(
+                          return Center(
+                            child: AlertDialog(
+                              backgroundColor: Color(0Xff252525),
+                              title: Icon(Icons.info),
+                              content: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Color.fromARGB(
-                                        255,
-                                        227,
-                                        12,
-                                        12,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadiusGeometry.circular(12),
-                                      ),
+                                  Text(
+                                    'Save changes ?',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.w400,
                                     ),
-
-                                    child: Text(
-                                      'Discard',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      // Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  SizedBox(width: 15),
-                                  TextButton(
-                                    child: Text(
-                                      'Keep',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Color.fromARGB(
-                                        255,
-                                        85,
-                                        231,
-                                        66,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadiusGeometry.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      // print(itemValue.noteList.length);
-                                      itemValue.addNote(
-                                        NoteModel(
-                                          description:
-                                              descriptionController.text,
-                                          title: titleController.text,
-                                          index: 0,
-                                        ),
-                                      );
-                                      titleController.clear();
-                                      descriptionController.clear();
-                                      Navigator.pop(context);
-                                    },
                                   ),
                                 ],
                               ),
-                            ],
+                              actions: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Color.fromARGB(
+                                          255,
+                                          227,
+                                          12,
+                                          12,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadiusGeometry.circular(7),
+                                        ),
+                                      ),
+
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 0,
+                                        ),
+                                        child: Text(
+                                          'Discard',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        // Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    SizedBox(width: 25),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Color.fromARGB(
+                                          255,
+                                          85,
+                                          231,
+                                          66,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadiusGeometry.circular(7),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        if (_formkey.currentState!.validate()) {
+                                          itemValue.addNote(
+                                            NoteModel(
+                                              description:
+                                                  descriptionController.text,
+                                              title: titleController.text,
+                                              index: 0,
+                                            ),
+                                          );
+                                        }
+
+                                        titleController.clear();
+                                        descriptionController.clear();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 0,
+                                        ),
+                                        child: Text(
+                                          'Save',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           );
                         },
                       );
@@ -148,51 +171,43 @@ class CreateNoteScreen extends StatelessWidget {
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: titleController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              // softWrap:true,
-              style: TextStyle(color: Colors.white, fontSize: 35),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(borderSide: BorderSide.none),
-                hint: Text(
-                  "Title",
-                  style: TextStyle(fontSize: 43, color: Color(0XFF9A9A9A)),
+        child: Form(
+          key: _formkey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: titleController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                // softWrap:true,
+                style: TextStyle(color: Colors.white, fontSize: 35),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  hint: Text(
+                    "Title",
+                    style: TextStyle(fontSize: 43, color: Color(0XFF9A9A9A)),
+                  ),
+                ),
+                validator: (title) =>
+                    titleController.text.isEmpty ? "Title cant be empty" : null,
+              ),
+              TextFormField(
+                controller: descriptionController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                style: TextStyle(color: Colors.white, fontSize: 23),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  hint: Text(
+                    "Type Something...",
+                    style: TextStyle(fontSize: 23, color: Color(0XFF9A9A9A)),
+                  ),
                 ),
               ),
-            ),
-            TextField(
-              controller: descriptionController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              style: TextStyle(color: Colors.white, fontSize: 23),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(borderSide: BorderSide.none),
-                hint: Text(
-                  "Type Something...",
-                  style: TextStyle(fontSize: 23, color: Color(0XFF9A9A9A)),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-
-
-// print(itemValue.noteList.length);
-//                       itemValue.addNote(
-//                         NoteModel(
-//                           description: descriptionController.text,
-//                           title: titleController.text,
-//                           index: 0
-//                         ),
-//                       );
-//                       titleController.clear();
-//                       descriptionController.clear();

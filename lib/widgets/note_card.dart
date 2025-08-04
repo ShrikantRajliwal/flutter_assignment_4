@@ -1,32 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NoteCard extends StatelessWidget {
-  String title;
-  String description;
-  
+  final String title;
+  final String description;
+  final Color color;
+  final int index;
+  final bool isDeleteMode; 
 
-  NoteCard({required this.title, required this.description, super.key});
+  const NoteCard({
+    required this.title,
+    required this.description,
+    required this.color,
+    required this.index,
+    required this.isDeleteMode,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 17),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ),
-      textColor: Colors.white,
-      tileColor: const Color.fromARGB(255, 240, 119, 110),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(10),
-      ),
+      tileColor: isDeleteMode ? Colors.red : color,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      title: isDeleteMode
+          ? const Center(
+              child: Icon(Icons.delete, color: Colors.white, size: 36),
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 8),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 25,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
     );
   }
 }
